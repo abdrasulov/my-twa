@@ -2,10 +2,6 @@ import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, 
 
 export type CounterConfig = {};
 
-export function counterConfigToCell(config: CounterConfig): Cell {
-    return beginCell().endCell();
-}
-
 export class Counter implements Contract {
     static createForDeploy(code: Cell, initialCounterValue: number): Counter {
         const data = beginCell()
@@ -20,12 +16,6 @@ export class Counter implements Contract {
 
     static createFromAddress(address: Address) {
         return new Counter(address);
-    }
-
-    static createFromConfig(config: CounterConfig, code: Cell, workchain = 0) {
-        const data = counterConfigToCell(config);
-        const init = { code, data };
-        return new Counter(contractAddress(workchain, init), init);
     }
 
     async sendDeploy(provider: ContractProvider, via: Sender, value: bigint) {
